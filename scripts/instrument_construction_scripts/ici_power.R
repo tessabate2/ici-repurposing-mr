@@ -1,5 +1,9 @@
 #module load languages/R/4.1.2 
 
+install.packages("survSNP")
+install.packages("tidyverse")
+install.packages("powerSurvEpi")
+
 # load packages
 library(survSNP)
 library(tidyverse)
@@ -61,7 +65,7 @@ return(power_tbl)
 ## PD-1
 breast_PD1 <- power_calc(protein = "PD1", survival = "breast", n = 91686, event_rate = (7531/91686), fiveyr_surv = 0.859, allele_freq = 0.2119, SNP_beta = -0.285*-1)
 crc_PD1 <- power_calc(protein = "PD1", survival = "colorectal", n = 16964, event_rate = (4010/16964), fiveyr_surv = 0.584, allele_freq = 0.2119, SNP_beta = -0.285*-1)
-lung_PD1 <- power_calc(protein = "PD1", survival = "lung", n = 7352, event_rate = (4598/7352), fiveyr_surv = 0.21, allele_freq = 0.2119, SNP_beta = -0.285*-1)
+lung_PD1 <- power_calc(protein = "PD1", survival = "lung", n = 12521, event_rate = (7218/12521), fiveyr_surv = 0.21, allele_freq = 0.2119, SNP_beta = -0.285*-1)
 mel_PD1 <- power_calc(protein = "PD1", survival = "melanoma", n = 10982, event_rate = (1041/10982), fiveyr_surv = 0.926, allele_freq = 0.2119, SNP_beta = -0.285*-1)
 ov_PD1 <- power_calc(protein = "PD1", survival = "ovarian", n = 2901, event_rate = (1656/2901), fiveyr_surv = 0.45, allele_freq = 0.2119, SNP_beta = -0.285*-1)
 pr_PD1 <- power_calc(protein = "PD1", survival = "prostate", n = 67758, event_rate = (7914/67758), fiveyr_surv = 0.885, allele_freq = 0.2119, SNP_beta = -0.285*-1)
@@ -72,7 +76,7 @@ PD1_powerest <- PD1_powerest[!duplicated(PD1_powerest), ]
 ## PD-L1
 breast_PDL1 <- power_calc(protein = "PDL1", survival = "breast", n = 91686, event_rate = (7531/91686), fiveyr_surv = 0.859, allele_freq = 0.7486, SNP_beta = 0.340)
 crc_PDL1 <- power_calc(protein = "PDL1", survival = "colorectal", n = 16964, event_rate = (4010/16964), fiveyr_surv = 0.584, allele_freq = 0.7486, SNP_beta = 0.340)
-lung_PDL1 <- power_calc(protein = "PDL1", survival = "lung", n = 7352, event_rate = (4598/7352), fiveyr_surv = 0.21, allele_freq = 0.7486, SNP_beta = 0.340)
+lung_PDL1 <- power_calc(protein = "PDL1", survival = "lung", n = 12521, event_rate = (7218/12521), fiveyr_surv = 0.21, allele_freq = 0.7486, SNP_beta = 0.340)
 mel_PDL1 <- power_calc(protein = "PDL1", survival = "melanoma", n = 10982, event_rate = (1041/10982), fiveyr_surv = 0.926, allele_freq = 0.7486, SNP_beta = 0.340)
 ov_PDL1 <- power_calc(protein = "PDL1", survival = "ovarian", n = 2901, event_rate = (1656/2901), fiveyr_surv = 0.45, allele_freq = 0.7486, SNP_beta = 0.340)
 pr_PDL1 <- power_calc(protein = "PDL1", survival = "prostate", n = 67758, event_rate = (7914/67758), fiveyr_surv = 0.885, allele_freq = 0.7486, SNP_beta = 0.340)
@@ -82,7 +86,7 @@ PDL1_powerest <- PDL1_powerest[!duplicated(PDL1_powerest), ]
 
 PD1_PDL1_powerest_main <- dplyr::full_join(PD1_powerest, PDL1_powerest)
 
-write.table(PD1_PDL1_powerest_main, "main_power_estimates_pd1_pdl1_240925.csv", sep = ",", quote = F, row.names = F)
+write.table(PD1_PDL1_powerest_main, "main_power_estimates_pd1_pdl1_170826.csv", sep = ",", quote = F, row.names = F)
 
 #### SENSITIVITY method
 ## Using powerSurvEpi package
@@ -90,8 +94,8 @@ write.table(PD1_PDL1_powerest_main, "main_power_estimates_pd1_pdl1_240925.csv", 
 library(powerSurvEpi)
 
 survival <- c("breast", "colorectal", "lung", "melanoma", "ovarian", "prostate")
-n <- c(91686, 16964, 7352, 10982, 2901, 67758)
-prop_died <- c((7531/91686), (4010/16964), (4598/7352), (1041/10982), (1656/2901), (7914/67758))
+n <- c(91686, 16964, 12521, 10982, 2901, 67758)
+prop_died <- c((7531/91686), (4010/16964), (7218/12521), (1041/10982), (1656/2901), (7914/67758))
 pd1_r2 <- 2.48/100
 pdl1_r2 <- 4.47/100
 # r2<-c(pd1_r2,pdl1_r2)
@@ -113,4 +117,4 @@ PD1_PDL1_powerest_sensitivity <- dplyr::full_join(pd1_powest_df, pdl1_powest_df)
 dplyr::rename("Protein" = "protein", "Survival outcome" = "survival", "Survival GWAS N participants" = "n", "Survival GWAS mortality event rate" = "event_rate",
 "Scaled N participants" = "n_r2", "Estimated HR detectable at 80% power" = "hr", "Power to detect estimated HR (%)" = "pow_to_detect_hr")
 
-write.table(PD1_PDL1_powerest_sensitivity, "sensitivity_power_estimates_pd1_pdl1_240925.csv",	sep = ",", quote = F, row.names	= F)
+write.table(PD1_PDL1_powerest_sensitivity, "sensitivity_power_estimates_pd1_pdl1_170826.csv",	sep = ",", quote = F, row.names	= F)
