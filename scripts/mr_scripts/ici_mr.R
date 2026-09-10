@@ -1,3 +1,4 @@
+## script to run for risk outcomes or different instrument construction criteria (modified loop variables as applicable)
 # Load required packages
 library(TwoSampleMR)
 library(tidyverse)
@@ -15,9 +16,9 @@ setwd("ici_analyses/UKBB")
 proteins <- c("PD1", "PDL1")
 survivals <- c("breast", "colorectal", "lung", "melanoma", "ovarian", "prostate")
 windows <- c(0, 50, 100)
-pvalues <- c(5e-8)
+pvalues <- c(5e-8, 5e-7, 5e-6)
 r_lds <- c(0.1,0.01,0.001)
-measures <- c("survival")
+measures <- c("survival", "risk")
 
 # Create data frame for all results to be stored in
 all_MR_res <- data.frame()
@@ -226,12 +227,6 @@ all_MR <- full_join(twoSMR_res, twoSMR_UKBld_tbl, by=colnames(twoSMR_res))
 ### Join MR results to table of all MR results
 all_MR_res <- rbind(all_MR_res, all_MR) 
 }}}}}}
-
-
-resultsdir <- Sys.getenv("resultsdir")
-setwd(resultsdir)
-
-write.table(all_MR_res, "PD1_PDL1_0kb50kbwindow_surv_res_240925.csv", sep = ",", quote = F, row.names = F)
 
 
 
