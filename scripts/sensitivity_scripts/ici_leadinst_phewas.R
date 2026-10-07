@@ -8,10 +8,6 @@ setwd(resultsdir)
 
 #ieugwasr::batches()
 
-##default pval
-#pd1_lead_phewas <- ieugwasr::phewas(variants = "rs75960776", pval = 1e-05)
-#pdl1_lead_phewas <- ieugwasr::phewas(variants = "rs822341", pval = 1e-05)
-
 ##n comparisons = n GWAS on OpenGWAS - outcomes on OpenGWAS already used
 ##outcomes on OpenGWAS used in previous analyses = ovarian cancer survival (1:ieu-a-1234), colorectal cancer risk (2:ebi-a-GCST90018808),...
 ##..., lung cancer risk (3:ieu-a-987), ovarian cancer risk (4:ieu-a-1120), prostate cancer risk (5:ieu-b-85) 
@@ -22,10 +18,6 @@ pd1_pdl1_proteins <- dplyr::filter(n_gwas, grepl('PD-1|PD-L1|Programmed cell dea
 
 n_gwas <- n_gwas[!n_gwas$id %in% ids_exclude, ]
 n_gwas <- n_gwas[!n_gwas$id %in% pd1_pdl1_proteins, ]
-
-##bonferroni correction (overly stringent so not using results)
-#pd1_lead_phewas_bfcor <- ieugwasr::phewas(variants = "rs75960776", pval = (5e-08/length(unique(n_gwas$id))))
-#pdl1_lead_phewas_bfcor <- ieugwasr::phewas(variants = "rs822341",pval = (5e-08/length(unique(n_gwas$id))))
 
 
 ##FDR correction
